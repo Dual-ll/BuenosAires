@@ -1,0 +1,50 @@
+---------------------------------------
+
+CREATE USER empresa IDENTIFIED BY ejemplo
+DEFAULT TABLESPACE "USERS"
+TEMPORARY TABLESPACE "TEMP";
+grant connect, resource, create view, create materialized view to empresa;
+
+----------------------------------------
+create table empleado(
+rut varchar2(20) not null,
+nombre varchar2(40) not null,
+apellido varchar2(80) not null,
+edad number(30) not null,
+constraint pk_empleado primary key(rut));
+
+insert into empleado(rut,nombre,apellido,edad) values('12345','julio','escudero',30);
+insert into empleado(rut,nombre,apellido,edad) values('32456','ignacio','ampuero',29);
+insert into empleado(rut,nombre,apellido,edad) values('67899','daniela','torres',25);
+
+
+select * from EMPLEADO;
+
+commit;
+
+--Procedimiento para agregar
+create or replace procedure sp_agregar_empleado(rut varchar2, nombre varchar2, apellido varchar2, edad number)
+is
+begin
+insert into EMPLEADO values(rut, nombre, apellido, edad);
+end;
+
+--procedimiento para listar
+create or replace procedure sp_listar_empleados(empleados out SYS_REFCURSOR) is
+begin
+    open empleados for select * from EMPLEADO;
+end;
+
+--procedimiento para modificar
+create or replace procedure SP_MODIFICAR_EMPLEADO(rut2 varchar2, nombre2 varchar2, apellido2 varchar2, edad2 number)
+is
+begin
+update EMPLEADO set NOMBRE=nombre2, APELLIDO=apellido2,EDAD=edad2 where RUT=rut2;
+end;
+
+--procedimiento para eliminar
+create or replace procedure SP_ELIMINAR_EMPLEADO(RUTE varchar2)
+is
+begin
+delete from EMPLEADO where RUT=RUTE;
+end;

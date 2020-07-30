@@ -1,0 +1,50 @@
+--------------------------------------------------------
+-- Archivo creado  - domingo-mayo-05-2019   
+--------------------------------------------------------
+
+CREATE USER TEST1 IDENTIFIED BY 123;
+GRANT ALL PRIVILEGES TO TEST1;
+
+--------------------------------------------------------
+--  DDL for Table USUARIO
+--------------------------------------------------------
+CREATE TABLE USUARIO (
+    "NOMBRE_USUARIO" VARCHAR2(30 BYTE), 
+	"CONTRASENA" VARCHAR2(30 BYTE), 
+	"TIPO" VARCHAR2(10 BYTE)
+    );
+
+
+Insert into USUARIO (NOMBRE_USUARIO,CONTRASENA,TIPO) values ('admin','1234','admin');
+--------------------------------------------------------
+--  DDL for Function FN_CARGO
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION FN_CARGO (usua in varchar2) RETURN VARCHAR2 IS
+    V_CARGO VARCHAR2(30);
+BEGIN
+    SELECT TIPO INTO V_CARGO
+    FROM USUARIO 
+    WHERE NOMBRE_USUARIO=usua;
+
+    RETURN V_CARGO;
+
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Function FN_LOGIN
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION FN_LOGIN (usua in varchar2,contra in varchar2) RETURN NUMBER IS
+    V_USUARIO VARCHAR2(30);
+    V_CONTRA VARCHAR2(30);
+BEGIN
+    SELECT NOMBRE_USUARIO, CONTRASENA INTO V_USUARIO, V_CONTRA FROM USUARIO WHERE NOMBRE_USUARIO=usua;
+
+    IF V_USUARIO=usua AND V_CONTRA=contra THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;    
+END;
